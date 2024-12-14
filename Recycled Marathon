@@ -1,0 +1,115 @@
+import pygame
+import random
+from pygame.locals import *
+import time
+
+# change background
+def changeBackground(img):
+    # change the background
+    background = pygame.image.load(img)
+    # set its size
+    bg = pygame.transform.scale(background, (screen_width,screen_height))
+    screen.blit(bg,(0,0))
+
+
+# Initialize Pygame
+pygame.init()
+pygame.display.set_caption('Recycle Marathon')
+# Setthe height and width of the screen
+screen_width = 900
+screen_height = 700
+screen = pygame.display.set_mode([screen_width,screen_height])
+
+# Player sprite (Bin)
+class Bin(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load('bin.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (40,60))
+        self.rect = self.image.get_rect()
+
+# Recyclable sprite
+class Recyclable(pygame.sprite.Sprite):
+    def __init__(self,img):
+       super().__init__()
+       self.image = pygame.image.load('plastic.png').convert_alpha()
+       self.image = pygame.transformscale(self.image, (40,40))
+       self.rect = self.image.get_rect()
+
+# Non-recyclable sprite
+class Non_recyclable(pygame.sprite.Sprite):
+    def __init__(self):
+       super().__init__()
+       self.image = pygame.image.load('plastic.png').convert_alpha()
+       self.image = pygame.transformscale(self.image, (40,40))
+       self.rect = self.image.get_rect()
+
+# List of things for Recyclable class
+images = ["item1.png","item.png","item.png"]
+
+#create sprite groups
+item_list = pygame.sprite.Group()
+allsprites = pygame.sprite.Group()
+plastic_list = pygame.sprite.Group()
+
+#create item sprite
+for i in range(50):
+    item = Recyclable(random.choice(images))
+    # set a random location for the item
+    item.rect.x = random.randrange(screen_width)
+    item.rect.y = random.randrange(screen_height)
+    # add to item list
+    item_list.add(item)
+    allsprites.add(item)
+
+#create plastic 
+for i in range(20):
+    plastic = Non_recyclable()
+    # set a random location for the plastic
+    plastic.rect.x = random.randrange(screen_width)
+    plastic.rect.y = random.randrange(screen_height)
+    # add to plastic list
+    plastic_list.add(plastic)
+    allsprites.add(plastic)
+
+# Create bin
+bin = Bin()
+allsprites.add(bin)
+
+# initialisize esential variables
+# define colour
+WHITE = (255,255,255)
+RED = (255,0,0)
+
+playing = True
+score = 0
+# clock
+clock = pygame.time.Clock()
+#start time
+start-time = time.time()
+#font to print score on screen
+myFont = pygame.font.Sysfont("Times New Roman",22)
+timingFont = pygame.font.SysFont("Times New Roman",22)
+text = myFont.render("Score =" + str(0),True,WHITE)
+
+#------------ Main Program Loop -------------
+while playing:
+    #refresh 60 times in a second
+    #can be used to control speed
+    clock.tick(30)
+
+    #quit the game
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            playing = False
+        
+    #check if time > 60 secs
+    timeElapsed = time.time()-start_time
+    if timeElapsed >= 60:
+        if score > 50:
+            text = myFont.render("     Bin loot successful    ",True,RED)
+            # change the background
+            changeBackground("windscreen.jpg")
+            
+
+
